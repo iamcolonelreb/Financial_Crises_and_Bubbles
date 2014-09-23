@@ -4,6 +4,7 @@
 \usepackage{tikz}
 \usepackage{amsmath}
 \usepackage[margin=1in]{geometry}
+\usepackage{url}
 \usetikzlibrary{positioning}
 
 \setlength{\parindent}{2em}
@@ -237,6 +238,8 @@ legend(1,800, legend=c("G.1,", "G.2", "H.1", "H.2", "B.1", "B.2"),
 \begin{flushleft}
 I used LaTeX, a document processing and markuo language, and the R programming
 language to complete this homework. I would have attached the coding but it 
-is pretty long. If you really want to see it, I could print it out.
+is pretty long. If you really want to see it, I could print it out. However, I
+have added a repository on Github that contains the coding for each of the
+homeworks where I have used computer codes. It can be found at \url{https://github.com/iamcolonelreb/Financial_Crises_and_Bubbles}
 \end{flushleft}
 \end{document}
