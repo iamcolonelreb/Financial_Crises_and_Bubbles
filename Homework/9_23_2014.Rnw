@@ -1,0 +1,242 @@
+\documentclass[a4paper, 10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage[margin=1in]{geometry}
+\usetikzlibrary{positioning}
+
+\setlength{\parindent}{2em}
+\setlength{\parskip}{1em}
+\renewcommand{\baselinestretch}{1.0}
+\tikzstyle{level 1}=[level distance=3.5cm, sibling distance=5.5cm]
+\tikzstyle{level 2}=[level distance=2.5cm, sibling distance=3cm]
+\tikzstyle{level 3}=[level distance=3.5cm, sibling distance=2cm]
+\tikzstyle{bag} = [text width=4em, text centered]
+\tikzstyle{end} = [circle, minimum width=3pt, inner sep=1pt]
+\tikzstyle{ans} = [color=black]
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+\paragraph{Information: Part One}
+\begin{flushleft}	
+	Suppose we have an asset that has a dividend, $d$, that pays $\$20$ per period, $d$=$\$20$. In period 2 we learn if we are in a "bad" world state with probability of $0.7$, in which the dividend falls to $d^b_3$=$\$5$. There is a $0.3$ probability we are in the $\{Good, Hopeful\}$ state where the dividend remains $d$=$\$20$. If we are in the $\textbf{bad}$ world then the dividend payments continues forever. We learn in period three whether we are in the $\textbf{Good}$ state with probability $0.9$ or we could be in the $\textbf{Hopeful}$ with a probability of $0.1$. The $\textbf{Good}$ world pays a dividend,$d^g_4$=$\$40$, and it continues this dividend forever. The $\textbf{Hopeful}$ world has dividend payment that is the same as the initial dividend, and the payment continues forever.
+\end{flushleft}
+\paragraph*{Information: Part Two}
+\begin{flushleft}
+	Assume that Federal Reserve sets the interest rates in the economy. In period 4 we learn that the Federal Reserve could react to each world state by changing the interest rates or leaving them unchanged. In the $\textbf{Good}$ state, the Fed believes that the rise in asset prices is due to a bubble with a probability $0.3$, and because of this they raise the interest rate to $r$=$10\%$. If we are in the $\textbf{Hopeful}$ state then the Fed sees the fall in asset prices harmful to the economy with a probability $0.2$, and as such they lower the interest rate to $r$=$4\%$. Finally, if we are in the $\textbf{Bad}$ state, the Fed believes that we are in a recession with a probability of $0.5$ and cuts the interest rate to $r$=$2\%$ 
+\end{flushleft}
+\section*{Probability}
+\begin{flushleft}
+\begin{tikzpicture}[level distance=3cm,
+level 1/.style={level distance=2cm, sibling distance=5.5cm},
+level 2/.style={level distance=3.5cm, sibling distance=3cm},
+level 3/.style={level distance=5.5cm, sibling distance=2cm},grow=right]
+\tikzstyle{every node}=[]
+    \node (Root) [] {Original State}
+        child [] {
+        node {\{Bad\}}
+        child { node {$B_2$} 
+                child {node[end] {$P(B_2)=0.7\cdot0.5=0.35$} }
+                edge from parent
+                node[above] {$r=2\%$}
+                node[below] {$0.5$}
+        }
+        child {node {$B_1$} 
+                child {node {$P(B_1)=0.7\cdot0.5=0.35$}}
+                edge from parent
+                node[above] {$r$=$5\%$}
+                node[below] {$0.5$}
+        }
+        edge from parent
+        node[right] {$0.7$}
+    }
+    child {
+        node {\{Good,Hopeful\}}
+        child { node {$Hopeful$} 
+                child {node {$P(H_2)$=0.3$\cdot$0.1$\cdot$0.2=0.006}
+                edge from parent
+                node[above]{$r=2\%$}
+                node[below] {$0.2$}} 
+                child {node[ans,end] {$P(H_1)$=0.3$\cdot$0.1$\cdot$0.8=0.024}
+                edge from parent
+                node[above]{$r=5\%$}
+                node[below] {$0.8$} }
+                edge from parent
+                node[above] {$0.1$}
+                edge from parent
+        }
+        child { node {$Good$} 
+                child {node {$P(G_2)$=0.3$\cdot$0.9$\cdot$0.3=0.081}
+                edge from parent
+                node[above]{$r=10\%$}
+                node[below] {$0.3$}} 
+                child {node[ans,end] {$P(G_1)$=0.3$\cdot$0.9$\cdot$0.7=0.189}
+                edge from parent
+                node[above]{$r=5\%$}
+                node[below] {$0.7$}}
+                edge from parent
+                node[above] {$0.9$}
+                edge from parent
+        }
+        edge from parent
+        node[ans,left] {$0.3$}
+    };
+\end{tikzpicture}
+\end{flushleft}
+
+\begin{center}
+\begin{equation}
+Pr\{Good, Hopeful\} = Pr\{G_1\} + Pr\{G_2\} + Pr\{H_1\} + Pr\{H_1\} = 0.3
+\end{equation}
+\begin{equation}
+Pr\{Bad\} = Pr\{B_1\} + Pr\{B_2\}=0.7 
+\end{equation}
+\end{center}
+
+\section*{Dividends}
+\begin{center}
+\begin{tabular}{r | l*{12}{c}r}
+State	& $sym$ & Prob. &$r_{future}$ & t & 1 & 2 & 3 & 4 & 5 & 6 & ... &\\
+\hline
+$G_1$	& $d_g$ & 0.189 & $r_{future}$=$5\%$ & $$ & $\$20$ & $\$20$ & $\$20$ & $\$40$ & $\$40$ & $\$40$ & $\$40$\\
+$G_2$	& $d_g$ & 0.081 & $r_{future}$=$10\%$ & $$ &  $\$20$ & $\$20$ & $\$20$ & $\$40$ & $\$40$ & $\$40$ & $\$40$\\
+$H_1$	& $d_h$ & 0.024 & $r_{future}$= $5\%$ & $$ &  $\$20$ & $\$20$ & $\$20$ & $\$20$ & $\$20$ & $\$20$ & $\$20$\\
+$H_2$	& $d_h$ & 0.006 & $r_{future}$=$4\%$ & $$ &  $\$20$ & $\$20$ & $\$20$ & $\$20$ & $\$20$ & $\$20$ & $\$20$\\
+$B_1$	& $d_b$ & 0.35  & $r_{future}$=$5\%$ & $$ &  $\$20$ & $\$20$ & $\$5$ & $\$5$ & $\$5$ & $\$5$ & $\$5$ \\
+$B_2$	& $d_b$ & 0.35  & $r_{future}$=$2\%$ & $$ &  $\$20$ & $\$20$ & $\$5$ & $\$5$ & $\$5$ & $\$5$ & $\$5$ \\
+\end{tabular}
+\end{center}
+\section*{Prices of Asset}
+The prices of the asset can be represented by the equation:
+\begin{equation}
+P_{t}=\frac{E_td_{t+1}+E_tP_{t+1}}{1+r_{t}}
+\end{equation} 
+\begin{center}
+\begin{tabular}{r | l*{12}{c}r}
+State	& $sym$ & Prob. &$r_{future}$ & t & 1 & 2 & 3 & 4 & 5 & 6 & ... &\\
+\hline
+$G_1$	& $P^{G_{1}}$ & 0.189 & $r_{future}$=$5\%$  & $$  & $\$314.99$ & $\$310.74$ & $\$663.86$ & $\$685.71$ & $\$800$ & $\$800$ & $\$800$\\
+$G_2$	& $P^{G_{2}}$ & 0.081 & $r_{future}$=$10\%$ & $$  & $\$314.99$ & $\$310.74$ & $\$663.86$ & $\$685.71$ & $\$800$ & $\$400$ & $\$400$\\
+$H_1$	& $P^{H_{1}}$ & 0.024 & $r_{future}$= $5\%$ & $$  & $\$314.99$ & $\$310.74$ & $\$663.86$ & $\$419.05$ & $\$400$ & $\$400$ & $\$400$\\
+$H_2$	& $P^{H_{2}}$ & 0.006 & $r_{future}$=$4\%$  & $$  & $\$314.99$ & $\$310.74$ & $\$663.86$ & $\$419.05$ & $\$500$ & $\$500$ & $\$500$\\
+$B_1$	& $P^{B_{1}}$ & 0.35  & $r_{future}$=$5\%$  & $$  & $\$314.99$ & $\$310.74$ & $\$168.03$ & $\$171.43$ & $\$100$ & $\$100$ & $\$100$\\
+$B_2$	& $P^{B_{2}}$ & 0.35  & $r_{future}$=$2\%$  & $$  & $\$314.99$ & $\$310.74$ & $\$168.03$ & $\$171.43$ & $\$250$ & $\$250$ & $\$250$\\
+\end{tabular}
+\end{center}
+\subsection*{Calculations}
+%%Coding for calculations
+\paragraph*{Period 4 Prices}
+\begin{align*}
+E_4P^G_5         &= (0.8)P^{G_1}_5 + (0.2)P^{G_2}_5\\
+                 &= (0.8)800 + (0.2)400\\
+                 &= 560 + 120\\
+                 &= 680\\	                       	                          
+\end{align*}
+\begin{align*}
+P^G_{4}			&=\frac{d_{5}+E_4P_{5}}{1+r_{4}}=\frac{\$40+\$680}{1+.05}\\
+				&=\frac{\$720}{1.05}\\
+				&=\$685.71\\
+\end{align*}
+\begin{align*}
+E_4P^H_5        &= (0.8)P^{H_1}_5 + (0.2)P^{H_2}_5= (0.8)\$400 + (0.2)\$500\\
+                 &= \$320 + \$100\\
+                 &= \$420\\	
+\end{align*}                 
+\begin{align*}
+P^H_{4}			&=\frac{d_{5}+E_4P_{5}}{1+r_{4}}=\frac{\$20+\$420}{1+0.05}\\
+				&=\frac{\$440}{1.05}\\
+				&=\$419.05\\
+\end{align*}
+\begin{align*}
+E_4P^B_5        &= (0.5)P^{B_1}_5 + (0.5)P^{B_2}_5= (0.5)\$100 + (0.5)\$250\\
+                 &= \$50 + \$125\\
+                 &= \$175\\	
+\end{align*}                 
+\begin{align*}
+P^B_{4}			&=\frac{d_{5}+E_4P_{5}}{1+r_{4}}=\frac{\$5+\$175}{1+0.05}\\
+				&=\frac{\$180}{1.05}\\
+				&=\$171.43\\
+\end{align*}
+\paragraph*{Period 3 Prices}
+\begin{align*}
+E[d_4\mid S\in\{Good, Hopeful\}]        &= (0.9)d^G_4 + (0.1)d^H_5\\
+                                        &= (0.9)\$40 + (0.1)\$20\\
+                                        &= \$36 + \$2\\
+                                        &= \$38\\
+\end{align*}
+\begin{align*}
+E[P_4\mid S\in\{Good, Hopeful\}]        &= (0.9)P^G_4 + (0.1)P^H_4\\
+                                        &= (0.9)\$685.71 + (0.1)\$419.05\\
+                                        &= \$617.14 +\$41.91\\
+                                        &= \$659.05\\	
+\end{align*}
+\begin{align*}
+P_{3}\mid\{Good, Hopeful\}			&=\frac{E_3d_{4}+E_3P_{4}}{1+r_{3}}=\frac{\$38+\$659.05}{1+0.05}\\
+				                     &=\frac{\$697.05}{1.05}\\
+				                     &=\$663.86\\
+\end{align*}
+\begin{align*}
+P_{3}\mid\{Bad\}			&=\frac{d_{4}+E_3P_{4}}{1+r_{3}}=\frac{\$5+\$171.43}{1+0.05}\\
+				                     &=\frac{\$176.43}{1.05}\\
+				                     &=\$168.03\\
+\end{align*}
+\paragraph*{Period 2 Prices}
+\begin{align*}
+E_2d_3           &= (0.3)d^{\{H,G\}}_3+ (0.7)d^{B}_3= (0.3)\$20 + (0.7)\$5\\
+                 &= \$6 + \$3.5\\
+                 &= \$9.5\\	
+\end{align*}
+\begin{align*}
+E_2P_3           &= (0.3)P^{\{H,G\}}_3+ (0.7)P^{B}_3= (0.3)\$663.86 + (0.7)\$234.55\\
+                 &= \$199.16 + \$117.62\\
+                 &= \$316.78\\	
+\end{align*}
+\begin{align*}
+P_{2}			&=\frac{E2d_{3}+E_2P_{3}}{1+r_{2}}=\frac{\$9.5+\$316.78}{1+0.05}\\
+				                     &=\frac{\$326.28}{1.05}\\
+				                     &=\$310.74\\
+\end{align*}
+\paragraph*{Period 1 Prices}
+\begin{align*}
+P_{1}			&=\frac{d_{2}+P_{2}}{1+r_1}=\frac{\$20+\$310.74}{1+0.05}\\
+				                     &=\frac{\$330.74}{1.05}\\
+				                     &=\$314.99\\
+\end{align*}
+%%R Programming Coding
+\begin{center}
+<<fig=TRUE, echo=FALSE>>=
+t <- c(1:7)
+prices<- data.frame(t)
+prices$G.1 <- c(314.99, 310.74, 663.86, 685.71, 800, 800, 800)
+prices$G.2 <- c(314.99, 310.74, 663.86, 685.71, 400, 400, 400)
+prices$H.1 <- c(314.99, 310.74, 663.86, 419.05, 400, 400, 400)
+prices$H.2 <- c(314.99, 310.74, 663.86, 419.05, 500, 500, 500)
+prices$B.1 <- c(314.99, 310.74, 168.03, 171.43, 100, 100, 100)
+prices$B.2 <- c(314.99, 310.74, 168.03, 171.43, 250, 250, 250)
+
+with(prices, plot(t, G.1, type="l", col="dodgerblue",
+                  main="Price of Assets Among Scenarios",
+                  xlab="Period, t", ylab="Price",
+                  ylim=c(0,800), lty=1, lwd=3))
+with(prices, lines(t, G.2, type="l", col="black",
+                   lty=2, lwd=3))
+with(prices, lines(t, H.1, type="l", col="red",
+                   lty=3, lwd=3))
+with(prices, lines(t, H.2, type="l", col="lawngreen",
+                   lty=4, lwd=3))
+with(prices, lines(t, B.1, type="l", col="brown",
+                   lty=5, lwd=3))
+with(prices, lines(t, B.2, type="l", col="gold",
+                   lty=6, lwd=3))
+legend(1,800, legend=c("G.1,", "G.2", "H.1", "H.2", "B.1", "B.2"),
+       col=c("dodgerblue", "black", "red", "lawngreen", "brown", "gold"),
+       lty=1:6, lwd=5, cex=.5)
+@
+\end{center}
+\begin{flushleft}
+I used LaTeX, a document processing and markuo language, and the R programming
+language to complete this homework. I would have attached the coding but it 
+is pretty long. If you really want to see it, I could print it out.
+\end{flushleft}
+\end{document}
